@@ -1,0 +1,4 @@
+
+1,addition,2
+2,substraction,3
+3,substraction,1,multiplication,2
