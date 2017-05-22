@@ -3,16 +3,35 @@ package pipeLine;
 import java.util.ArrayList;
 import java.util.List;
 
+import command.CommandOrder;
+
 public class DecodingWorker implements CurrentWorker{
+	
+	public enum Operator {
+		addition("addition")
+		, multiplication("multiplication")
+		, division("division");
+		
+		private String value;
+		
+		Operator(String value) {
+			this.value = value;
+		}
+		private String getValue() {
+			return this.value;
+		}
+	}
 	
 	private volatile boolean isUsing;
 	private volatile List<Integer> operands;	//피연산자
 	private volatile List<String> operators;	//연산자
 	private volatile boolean isLastCommand;
+	private volatile CommandOrder commandOrder;
 	
 	public DecodingWorker() {
 		this.isUsing = false;
 		this.isLastCommand = false;
+		this.commandOrder = new CommandOrder();
 	}
 	
 	public synchronized boolean isLastCommand() {
@@ -27,7 +46,9 @@ public class DecodingWorker implements CurrentWorker{
 		this.operators =  new ArrayList<String>();
 		
 		// 명령어를 꺼내서 연산자와 피연산자로 구분하여 세팅한다.
-		this.separateOperandAndOperator((FullingWorker) prevWorker);
+		this.operators = this.commandOrder.makeOperators((FullingWorker) prevWorker);
+		this.operands = this.commandOrder.makeOperands((FullingWorker) prevWorker);
+		
 		System.out.println("연산자 = " + operators.toString());
 		System.out.println("피연산자 = " + operands.toString());
 		
@@ -48,17 +69,6 @@ public class DecodingWorker implements CurrentWorker{
 	@Override
 	public synchronized void setUsingFalse() {
 		this.isUsing = false;
-	}
-	
-	public synchronized void separateOperandAndOperator(FullingWorker prevWorker) {
-		String command = prevWorker.getCommandSet().getCommand();
-		if(command != null) {
-			String[] commandArray = command.split(",");
-			/*for(int i = 0; i < commandArray.length; i++) {
-				if((i + 2) % 2 == 0) this.operands.add(Integer.parseInt(commandArray[i]));	// 피연산자를 넣는다.
-				else this.operators.add(commandArray[i]);	// 연산자를 넣는다.
-			}*/
-		}
 	}
 	
 	
