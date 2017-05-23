@@ -3,7 +3,6 @@ package command;
 import java.util.ArrayList;
 import java.util.List;
 
-import pipeLine.DecodingWorker.Operator;
 import pipeLine.FullingWorker;
 
 public class CommandOrder {
@@ -53,13 +52,13 @@ public class CommandOrder {
 	}
 	
 	public void orderOperators() {
+		
 		for(int i = 0; i < this.operators.size(); i++) {
-			for(int j = 0; j < Operator.values().length; j++) {
-				if(Operator.values()[0].name().equals("multiplication") || Operator.values()[0].name().equals("division")) {
-					
-				}
+			for(int j = 0; j < this.operators.size(); j++) {
+				
 			}
 		}
+		
 	}
 	
 	
